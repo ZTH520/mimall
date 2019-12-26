@@ -58,7 +58,7 @@
       </div>
       <div class="banner">
         <a href="/#/product/30">
-          <img v-lazy="'/imgs/banner-1.png'"/>
+          <img v-lazy="'/imgs/banner-1.png'" />
         </a>
       </div>
     </div>
@@ -68,7 +68,7 @@
         <div class="wrapper">
           <div class="banner-left">
             <a href="/#/product/35">
-              <img v-lazy="'/imgs/mix-alpha.jpg'">
+              <img v-lazy="'/imgs/mix-alpha.jpg'" />
             </a>
           </div>
           <div class="list-box">
@@ -77,7 +77,7 @@
                 <span v-if="j%2==0" class="new-pro">新品</span>
                 <span class="kill-pro" v-if="j%2==1">秒杀</span>
                 <div class="item-img">
-                  <img v-lazy="item.mainImage">
+                  <img v-lazy="item.mainImage" />
                 </div>
                 <div class="item-info">
                   <h3>{{item.name}}</h3>
@@ -91,18 +91,20 @@
       </div>
     </div>
     <ServiceBar></ServiceBar>
-    <Modal 
+    <Modal
       title="提示"
-      sureText="查看购物车" 
-      btnType="1" 
+      sureText="查看购物车"
+      btnType="1"
       modalType="middle"
       :showModal="showModal"
       @submit="goToCart"
       @cancel="showModal=false"
     >
-    <template v-slot:body>
-      <div><p>商品添加成功</p></div>
-    </template>
+      <template v-slot:body>
+        <div>
+          <p>商品添加成功</p>
+        </div>
+      </template>
     </Modal>
   </div>
 </template>
@@ -125,29 +127,42 @@ export default {
     // }
   },
   mounted() {
-    this.init()
+    this.init();
   },
   filters: {
     currency(val) {
-      return val? '￥'+val.toFixed(2)+'元' : '0.00'
+      return val ? "￥" + val.toFixed(2) + "元" : "0.00";
     }
   },
-  methods:{
-    init(){
-      this.axios.get('/products',{
-        params: {
-          categoryId: '100012',
-          pageSize: 14
-        }
-      }).then((res)=>{
-        this.phoneList = [res.list.slice(6,10),res.list.slice(10)];
-      })
+  methods: {
+    init() {
+      this.axios
+        .get("/products", {
+          params: {
+            categoryId: "100012",
+            pageSize: 14
+          }
+        })
+        .then(res => {
+          this.phoneList = [res.list.slice(6, 10), res.list.slice(10)];
+        });
     },
-    addCart(){
-      this.showModal = true;
+    addCart(id) {
+      this.axios
+        .post("/carts", {
+          productId: id,
+          selected: true
+        })
+        .then(res => {
+          this.showModal = true;
+          this.$store.dispatch("saveCartCount", res.cartTotalQuantity);
+        })
+        .catch(() => {
+          this.showModal = true;
+        });
     },
-    goToCart(){
-      this.$router.push('/cart')
+    goToCart() {
+      this.$router.push("/cart");
     }
   },
   data() {
@@ -344,80 +359,80 @@ export default {
   .product-box {
     background-color: $colorJ;
     padding: 30px 0 50px;
-    h2{
+    h2 {
       font-size: $fontF;
       height: 21px;
       line-height: 21px;
       color: $colorB;
       margin-bottom: 20px;
     }
-    .wrapper{
+    .wrapper {
       display: flex;
-      .banner-left{
+      .banner-left {
         margin-right: 16px;
-        img{
+        img {
           width: 224px;
           height: 619px;
         }
       }
-      .list-box{
+      .list-box {
         flex: 1;
-        .list{
+        .list {
           @include flex();
           margin-bottom: 14px;
           &:last-child {
             margin-bottom: 0;
           }
-          .item{
+          .item {
             width: 236px;
             height: 302px;
             background-color: $colorG;
             text-align: center;
-            transition: all .5s;
-            &:hover{
-              box-shadow: 0 15px 30px rgba(0,0,0,.1);
-              transform: translate(0,-2px);
+            transition: all 0.5s;
+            &:hover {
+              box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+              transform: translate(0, -2px);
             }
-            span{
+            span {
               display: inline-block;
               width: 67px;
               height: 24px;
               line-height: 24px;
               font-size: 14px;
               color: $colorG;
-              &.new-pro{
-                background-color: #7ECF68;
+              &.new-pro {
+                background-color: #7ecf68;
               }
-              &.kill-pro{
-                background-color: #E82626;
+              &.kill-pro {
+                background-color: #e82626;
               }
             }
-            .item-img{
-              img{
+            .item-img {
+              img {
                 height: 195px;
                 width: 100%;
               }
             }
-            .item-info{
-              h3{
+            .item-info {
+              h3 {
                 font-size: $fontJ;
                 color: $colorB;
                 line-height: 14px;
                 font-weight: bold;
               }
-              p{
+              p {
                 color: $colorD;
                 line-height: 13px;
                 margin: 6px 0 13px;
               }
-              .price{
-                color: #F20A0A;
+              .price {
+                color: #f20a0a;
                 font-size: $fontJ;
                 font-weight: bold;
                 cursor: pointer;
-                &::after{
-                  content: ' ';
-                  @include bgImg(22px,22px,'/imgs/icon-cart-hover.png');
+                &::after {
+                  content: " ";
+                  @include bgImg(22px, 22px, "/imgs/icon-cart-hover.png");
                   vertical-align: middle;
                   margin-left: 5px;
                 }
