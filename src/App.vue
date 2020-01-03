@@ -6,38 +6,38 @@
 
 <script>
 export default {
-  name: 'app',
-  components: {
-    
-  },
+  name: "app",
+  components: {},
   data() {
     return {
-      res: ''
-    }
+      res: ""
+    };
   },
   mounted() {
-    this.getUser()
-    this.getCartCount()
+    if (this.$cookie.get("userId")) {
+      this.getUser();
+      this.getCartCount();
+    }
   },
-  methods:{
-    getUser(){
-      this.axios.get('/user').then((res={})=>{
+  methods: {
+    getUser() {
+      this.axios.get("/user").then((res = {}) => {
         //to-do 保存到vuex
-        this.$store.dispatch('saveUserName',res.username)
-      })
+        this.$store.dispatch("saveUserName", res.username);
+      });
     },
-    getCartCount(){
-      this.axios.get('/carts/products/sum').then((res=0)=>{
+    getCartCount() {
+      this.axios.get("/carts/products/sum").then((res = 0) => {
         //to-do 保存到vuex
-        this.$store.dispatch('saveCartCount',res)
-      })
+        this.$store.dispatch("saveCartCount", res);
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
-@import './assets/scss/reset.scss';
-@import './assets/scss/config.scss';
-@import './assets/scss/button.scss';
+@import "./assets/scss/reset.scss";
+@import "./assets/scss/config.scss";
+@import "./assets/scss/button.scss";
 </style>
